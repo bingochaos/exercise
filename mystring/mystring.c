@@ -8,71 +8,74 @@
 #include "mystring.h"
 #include <stddef.h>
 #include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+#include <stdarg.h>
 
 #define DEFAULT_CAPICITY 16
 #define MAX_INT 2147483647
 
-void ensureCapacity(struct string *str, int miniCapacity){
-	if(str->capacity == 0)
-		str->capacity = DEFAULT_CAPICITY;
+struct string{
+	char *string;
+	size_t length;
+	size_t capacity;
+};
 
-	if(miniCapacity - str->capacity >0)
-		expandCapacity(str, miniCapacity);
+static void expandCapacity(struct string *str, size_t miniCapacity){
+
+	size_t newCapacity = str->capacity <<1;
+
+				if(newCapacity < miniCapacity )
+					newCapacity = miniCapacity;
+
+				if(newCapacity < 0)
+				{
+					if(miniCapacity < 0)
+					{
+						printf("out of memory!");
+						return;
+					}
+					newCapacity = MAX_INT;
+				}
+				str->string = realloc(str->string, newCapacity);
+				str->capacity = newCapacity;
 }
-
-void expandCapacity(struct string *str, int miniCapacity){
-	int newCapacity = str->capacity*2 +2;
-
-	if(newCapacity - miniCapacity <0)
-		newCapacity = miniCapacity;
-
-	if(newCapacity <0)
+static void ensureCapacity(struct string *str, size_t miniCapacity){
+	if(str->capacity == 0)
 	{
-		if(miniCapacity <0)
-		{
-			printf("out of memory!");
-			return;
-		}
-		newCapacity = MAX_INT;
+		str->capacity = DEFAULT_CAPICITY;
+		str->string = realloc(str->string, DEFAULT_CAPICITY);
 	}
-	str->string = realloc(str->string, newCapacity);
-	str->capacity = newCapacity;
+
+
+	if(miniCapacity > str->capacity)//;
+	{
+		expandCapacity(str, miniCapacity);
+	}
+
 }
 
 
 struct string* string_new(const char *init){
 
-	struct string* newStr=(struct string *)malloc(sizeof(struct string));
-	newStr->string = (char* )malloc(sizeof(char *));
-	char* newChar = newStr->string;
-
-	while((*newStr->string++ = *init++ )!= '\0');
-
-	newStr->string = newChar;
-
-	return newStr;
+	if(init == NULL)
+		init = "";
+	return string_new_len(init,strlen(init));
 }
 
 struct string* string_new_len(const char* init, size_t len){
 
 	struct string* newStr = (struct string *)malloc(sizeof(struct string));
 
-	newStr->string = (char *)malloc(sizeof(char *));
+	newStr->string = NULL;
 	newStr->length = 0;
 	newStr->capacity = 0;
 
-	//ensureCapacity(newStr, len);
+	ensureCapacity(newStr, len);
 
-	char *dest = newStr->string;
-
-	for(int i =0;i<len;i++)
-	{
-		*newStr->string++ = *init++;
-	}
-
-	*newStr->string++='\0';
-
-	newStr->string = dest;
+	memcpy(newStr->string, init, len);
+	newStr->string[len] = '\0';
+	newStr->length = len;
 
 	return newStr;
 }
@@ -83,14 +86,7 @@ void string_free(struct string *s){
 }
 
 unsigned int string_length(struct string *s){
-
-	unsigned int len=0;
-
-	while(*s->string++!='\0')
-	{
-		len++;
-	}
-	return len;
+	return s->length;
 }
 
 const char *string_cstr(struct string *s){
@@ -98,38 +94,16 @@ const char *string_cstr(struct string *s){
 }
 
 struct string* string_append(struct string *s, const char *val){
-
-	char *new = s->string;
-
-	while(*s->string!='\0')
-	{
-		*s->string++;
-	}
-
-	while((*s->string++ = *val++ ) != '\0');
-
-	*s->string='\0';
-	s->string=new;
-
-	return s;
+	return string_append_len(s, val, strlen(val));
 }
 
 struct string* string_append_len(struct string *s, const char *val, unsigned int len){
 
-	char* tmp = s->string;
-
-	while(*s->string != '\0')
-	{
-		*s->string++;
-	}
-
-	while(len--)
-	{
-		if((*(s->string)++ = *val++) != '\0');
-	}
-
-	*s->string='\0';
-	s->string= tmp;
-
+	unsigned int miniCapacity = s->length + len;
+	ensureCapacity(s, miniCapacity);
+	memcpy(s->string + s->length, val , len);//利用char*的偏移
+	s->string[miniCapacity] = '\0';
+	s->length = miniCapacity;
+	return s;
 	return s;
 }
