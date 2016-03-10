@@ -36,14 +36,14 @@ void* service_thread(void* p){
 		}
 		client_num++;
 		for(int i=0;i<client_num;i++){
-		printf("%s jion\n", clients[i].name);
+		printf("%s join\n", clients[i].name);
 		send(clients[i].socket,name,strlen(name),0);
 		}
 
 		char buff[20];
 
 		while(1){
-				if(recv(socket,buff,sizeof(buff),0)<0){				
+				if(recv(socket,buff,sizeof(buff),0)<=0){				
 					int i;
 					char name[10]={0};
 					for(i=0;i<client_num;i++){
@@ -64,6 +64,7 @@ void* service_thread(void* p){
 			}
 			for(int i=0;i<client_num;i++){
 			printf("send to%s\n", clients[i].name);
+			printf("%s\n",buff);
 			send(clients[i].socket,buff,strlen(buff),0);
 		}
 		
@@ -93,7 +94,7 @@ int main(int argc,char *argv[]){
 		exit(1);
 	}
 
-	if(listen(listened_socket,10)==-1){
+	if(listen(listened_socket,2)==-1){
 		printf("listen() error\n");
 		exit(1);
 	}

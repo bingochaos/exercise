@@ -14,7 +14,7 @@ void* recv_thread(void* p){
 	while(1){
 		int bufsize;
 		char buf[100]={0};
-		if((bufsize= recv(socket_send,buf,sizeof(buf),0))==-1)
+		if((bufsize= recv(socket_send,buf,sizeof(buf),0))<=0)
 	{
 		printf("recv error\n");
 		exit(1);
@@ -59,7 +59,7 @@ int main(int argc ,char *argv[]){
 	 while(1){
 	    char buf[100] = {0};
         scanf("%s",buf);//接受用户输入
-        printf("%s",buf);
+        printf("%s\n",buf);
         char msg[100] = {0};
 		sprintf(msg,"%s说:%s",name,buf);
         send(socket_send,msg,strlen(msg),0);//发给服务器
