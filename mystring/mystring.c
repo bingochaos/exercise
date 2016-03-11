@@ -71,7 +71,7 @@ struct string* string_new_len(const char* init, size_t len){
 	newStr->length = 0;
 	newStr->capacity = 0;
 
-	ensureCapacity(newStr, len);
+	ensureCapacity(newStr, len+1);
 
 	memcpy(newStr->string, init, len);
 	newStr->string[len] = '\0';
@@ -104,6 +104,5 @@ struct string* string_append_len(struct string *s, const char *val, unsigned int
 	memcpy(s->string + s->length, val , len);//利用char*的偏移
 	s->string[miniCapacity] = '\0';
 	s->length = miniCapacity;
-	return s;
 	return s;
 }
