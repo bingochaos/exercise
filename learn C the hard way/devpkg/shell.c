@@ -1,4 +1,4 @@
-#include "shll.h"
+#include "shell.h"
 #include "dbg.h"
 #include <stdarg.h>
 
@@ -6,7 +6,7 @@ int Shell_exec(Shell template, ...)
 {
 	apr_pool_t *p = NULL;
 	int rc = -1;
-	apr_status_t rv = APR_SUCCESS:
+	apr_status_t rv = APR_SUCCESS;
 	va_list argp;
 	const char *key = NULL;
 	const char *arg = NULL;

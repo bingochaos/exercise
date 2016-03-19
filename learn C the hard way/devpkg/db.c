@@ -33,7 +33,7 @@ static bstring DB_load()
 error:
 	if(db) DB_close(db);
 	if(data) bdestroy(data);
-	return NULL:
+	return NULL;
 }
 
 int DB_update(const char *url)
@@ -89,7 +89,7 @@ int DB_init()
 		apr_status_t rc = apr_dir_make_recursive(DB_DIR, 
 			APR_UREAD | APR_UWRITE | APR_UEXECUTE |
 			APR_GREAD | APR_GWRITE | APR_GEXECUTE, p);
-		check(rc == ARP_SUCCESS, "Failed to make database dir: %s", DB_DIR);
+		check(rc == APR_SUCCESS, "Failed to make database dir: %s", DB_DIR);
 	}
 
 	if(access(DB_FILE, W_OK) == -1)

@@ -13,4 +13,19 @@
 #define TAR_BZ2_PAT "*.tar.bz2"
 #define CONFIG_SCRIPT "/tmp/pkg-build/configure"
 
-enum Command
+enum CommandType {
+	COMMAND_NONE, COMMAND_INSTALL, COMMAND_LIST, COMMAND_FETCH,
+	COMMAND_INIT, COMMAND_BUILD
+};
+
+int Command_fetch(apr_pool_t *p, const char *url, int fetch_only);
+
+int Command_install(apr_pool_t *p, const char *url, const char *configure_opts,
+		const char *make_opts, const char *install_opts);
+
+int Command_depends(apr_pool_t *p, const char *path);
+
+int Command_build(apr_pool_t *p, const char *url, const char *configure_opts,
+		const char *make_opts, const char *install_opts);
+
+#endif
