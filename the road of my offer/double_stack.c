@@ -2,8 +2,8 @@
 
 struct double_stack
 {
-	int topindexA = 0;
-	int topindexB = MAX_LEN - 1;
+	int topindexA = -1;
+	int topindexB = MAX_LEN;
 	int a[MAX_LEN];
 };
 
@@ -18,7 +18,7 @@ void pushA(int a[], int i)
 
 int popA(int a[])
 {
-	if(topindexA == 0)
+	if(topindexA == -1)
 		printf("A is empty\n");
 
 	int tmp = a[topindexA];
@@ -38,7 +38,7 @@ void pushB(int a[], int i)
 
 int popB(int a[])
 {
-	if(topindexB == MAX_LEN - 1)
+	if(topindexB == MAX_LEN)
 		printf("B is empty\n");
 
 	int tmp = a[topindexB];
