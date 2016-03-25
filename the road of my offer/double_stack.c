@@ -10,7 +10,10 @@ struct double_stack
 void pushA(int a[], int i)
 {
 	if(topindexA >= topindexB)
+	{
+		printf("a is full\n");
 		return;
+	}	
 
 	topindexA ++;
 	a[topindexA] = i;
@@ -19,7 +22,10 @@ void pushA(int a[], int i)
 int popA(int a[])
 {
 	if(topindexA == -1)
+	{
 		printf("A is empty\n");
+		return;
+	}
 
 	int tmp = a[topindexA];
 	topindexA --;
@@ -30,7 +36,10 @@ int popA(int a[])
 void pushB(int a[], int i)
 {
 	if(topindexB <= topindexA)
+	{
+		printf("a is full\n");
 		return;
+	}
 
 	topindexB --;
 	a[topindexB] = i;
@@ -39,7 +48,10 @@ void pushB(int a[], int i)
 int popB(int a[])
 {
 	if(topindexB == MAX_LEN)
+	{
 		printf("B is empty\n");
+		return;
+	}
 
 	int tmp = a[topindexB];
 	topindexB --;
